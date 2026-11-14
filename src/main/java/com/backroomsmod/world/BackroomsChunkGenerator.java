@@ -42,6 +42,10 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static final int HALL_REGION = 3;       // halls are 3x3 cells
     private static final double HALL_CHANCE = 0.28;
     private static final double DOOR_CHANCE = 1.0 / 120.0; // chance per cell of holding the exit door
+    private static final double SPECIAL_CHANCE = 0.35;     // share of halls that hold a set piece
+    private static final int REGION_SIZE = HALL_REGION * CELL;
+    private static final int CEIL_NORMAL = 5;
+    private static final int CEIL_TALL = 14;
 
     public BackroomsChunkGenerator(BiomeSource biomeSource) {
         super(biomeSource);
@@ -104,7 +108,20 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         return base;
     }
 
+    /** -1 = ordinary region, otherwise the SetPieces type placed in the middle of this hall. */
+    private static int specialType(int rx, int rz) {
+        if (!isHall(rx, rz)) return -1;
+        if (rand01(mix(rx, rz, 11)) >= SPECIAL_CHANCE) return -1;
+        return (int) (mix(rx, rz, 12) & 3);
+    }
+
+    private static int ceilOfCell(int cx, int cz) {
+        int t = specialType(Math.floorDiv(cx, HALL_REGION), Math.floorDiv(cz, HALL_REGION));
+        return t >= 0 ? CEIL_TALL : CEIL_NORMAL;
+    }
+
     private static boolean hasDoor(int cx, int cz) {
+        if (ceilOfCell(cx, cz) == CEIL_TALL) return false; // set-piece rooms never hold the exit door
         return rand01(mix(cx, cz, 7)) < DOOR_CHANCE;
     }
 
@@ -139,9 +156,22 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                 int cz = Math.floorDiv(z, CELL);
                 int lx = Math.floorMod(x, CELL);
                 int lz = Math.floorMod(z, CELL);
+                int rx = Math.floorDiv(cx, HALL_REGION);
+                int rz = Math.floorDiv(cz, HALL_REGION);
+
+                int type = specialType(rx, rz);
+                int ownCeil = type >= 0 ? CEIL_TALL : CEIL_NORMAL;
+                boolean lineColumn = lx == 0 || lz == 0;
+                boolean post = lx == 0 && lz == 0;
+
+                // walls and openings on the boundary of a tall room reach up to that room's ceiling
+                int maxCeil = ownCeil;
+                if (lx == 0) maxCeil = Math.max(maxCeil, ceilOfCell(cx - 1, cz));
+                if (lz == 0) maxCeil = Math.max(maxCeil, ceilOfCell(cx, cz - 1));
+                if (post) maxCeil = Math.max(maxCeil, ceilOfCell(cx - 1, cz - 1));
 
                 boolean wall;
-                if (lx == 0 && lz == 0) {
+                if (post) {
                     wall = true; // corner post
                 } else if (lx == 0) {
                     int t = edgeType(1, cx, cz);
@@ -157,16 +187,28 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                 boolean light = hasLight(cx, cz, lx, lz);
                 Direction doorFacing = Direction.from2DDataValue((int) (mix(cx, cz, 8) & 3));
 
+                boolean inPiece = false;
+                int pdx = 0, pdz = 0;
+                if (type >= 0) {
+                    pdx = x - (rx * REGION_SIZE + REGION_SIZE / 2);
+                    pdz = z - (rz * REGION_SIZE + REGION_SIZE / 2);
+                    inPiece = Math.abs(pdx) <= 2 && Math.abs(pdz) <= 2;
+                }
+
                 for (int y = 0; y < 16; y++) {
                     BlockState state;
+                    BlockState pieceState = (inPiece && y >= 1) ? SetPieces.get(type, pdx, y, pdz) : null;
                     if (y == 0) {
                         state = bedrock;
+                    } else if (pieceState != null) {
+                        state = pieceState;
                     } else if (y == 1) {
                         state = carpet;
-                    } else if (y <= 4) {
-                        if (wall) {
-                            state = wallpaper;
-                        } else if (doorHere && y == 2) {
+                    } else if (wall && y < maxCeil) {
+                        // pillars in tall rooms glow so the floor is not pitch dark
+                        state = (post && type >= 0 && y == 3) ? lightPanel : wallpaper;
+                    } else if (!wall && y < ownCeil) {
+                        if (doorHere && y == 2) {
                             state = ModBlocks.EXIT_DOOR.get().defaultBlockState()
                                 .setValue(DoorBlock.FACING, doorFacing)
                                 .setValue(DoorBlock.HALF, DoubleBlockHalf.LOWER);
@@ -177,8 +219,12 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                         } else {
                             continue; // air
                         }
-                    } else if (y == 5) {
+                    } else if (!wall && y == ownCeil) {
                         state = light ? lightPanel : ceiling;
+                    } else if (y == maxCeil) {
+                        state = ceiling;
+                    } else if (!wall && lineColumn && y > ownCeil && y < maxCeil) {
+                        state = wallpaper;
                     } else {
                         state = bedrock;
                     }
