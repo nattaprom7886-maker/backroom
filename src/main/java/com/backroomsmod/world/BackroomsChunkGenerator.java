@@ -44,7 +44,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static final int HALL_REGION = 3;       // halls are 3x3 cells
     private static final double HALL_CHANCE = 0.28;
     private static final double DOOR_CHANCE = 1.0 / 1500.0; // chance per cell of holding the exit door (about 1 door per ~230x230 blocks)
-    private static final double SPECIAL_CHANCE = 0.07;     // share of halls that hold a set piece (about 1 set piece per ~130x130 blocks)
+    private static final double SPECIAL_CHANCE = 0.035;    // share of halls that hold a set piece (about 1 set piece per ~180x180 blocks)
     private static final double CHAIR_CHANCE = 0.06;      // chance per cell of holding a chair arrangement
     private static final int REGION_SIZE = HALL_REGION * CELL;
     private static final int CEIL_NORMAL = 6;
@@ -115,16 +115,24 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static int specialType(int rx, int rz) {
         if (!isHall(rx, rz)) return -1;
         if (rand01(mix(rx, rz, 11)) >= SPECIAL_CHANCE) return -1;
-        return (int) (mix(rx, rz, 12) & 3);
+        return (int) Math.floorMod(mix(rx, rz, 12), (long) SetPieces.TYPE_COUNT);
+    }
+
+    /** Set pieces get a tall room, except the McDonald's, which keeps an ordinary ceiling. */
+    private static boolean tallType(int type) {
+        return type >= 0 && type != SetPieces.TYPE_MCDONALDS;
+    }
+
+    private static int cellSpecialType(int cx, int cz) {
+        return specialType(Math.floorDiv(cx, HALL_REGION), Math.floorDiv(cz, HALL_REGION));
     }
 
     private static int ceilOfCell(int cx, int cz) {
-        int t = specialType(Math.floorDiv(cx, HALL_REGION), Math.floorDiv(cz, HALL_REGION));
-        return t >= 0 ? CEIL_TALL : CEIL_NORMAL;
+        return tallType(cellSpecialType(cx, cz)) ? CEIL_TALL : CEIL_NORMAL;
     }
 
     private static boolean hasDoor(int cx, int cz) {
-        if (ceilOfCell(cx, cz) == CEIL_TALL) return false; // set-piece rooms never hold the exit door
+        if (cellSpecialType(cx, cz) >= 0) return false; // set-piece rooms never hold the exit door
         return rand01(mix(cx, cz, 7)) < DOOR_CHANCE;
     }
 
@@ -135,7 +143,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static BlockState chairAt(int cx, int cz, int lx, int lz, int y) {
         if (y < 2 || y > 5) return null;
         if (rand01(mix(cx, cz, 20)) >= CHAIR_CHANCE) return null;
-        if (ceilOfCell(cx, cz) == CEIL_TALL || hasDoor(cx, cz)) return null;
+        if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
         int px = 1 + (int) Math.floorMod(mix(cx, cz, 21), 5L);
         int pz = 1 + (int) Math.floorMod(mix(cx, cz, 22), 5L);
         if (lx != px || lz != pz) return null;
@@ -164,6 +172,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static boolean hasLight(int cx, int cz, int lx, int lz) {
         if (lx < 2 || lx > 3 || lz < 2 || lz > 3) return false;
         if (hasDoor(cx, cz)) return true;
+        if (cellSpecialType(cx, cz) == SetPieces.TYPE_MCDONALDS) return true; // the restaurant is brightly lit
         return rand01(mix(cx, cz, 3)) < 0.55;
     }
 
@@ -196,7 +205,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                 int rz = Math.floorDiv(cz, HALL_REGION);
 
                 int type = specialType(rx, rz);
-                int ownCeil = type >= 0 ? CEIL_TALL : CEIL_NORMAL;
+                int ownCeil = tallType(type) ? CEIL_TALL : CEIL_NORMAL;
                 boolean lineColumn = lx == 0 || lz == 0;
                 boolean post = lx == 0 && lz == 0;
 
@@ -228,7 +237,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                 if (type >= 0) {
                     pdx = x - (rx * REGION_SIZE + REGION_SIZE / 2);
                     pdz = z - (rz * REGION_SIZE + REGION_SIZE / 2);
-                    inPiece = Math.abs(pdx) <= 2 && Math.abs(pdz) <= 2;
+                    inPiece = Math.abs(pdx) <= SetPieces.halfX(type) && Math.abs(pdz) <= SetPieces.halfZ(type);
                 }
 
                 for (int y = 0; y < 16; y++) {
@@ -242,7 +251,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                         state = carpet;
                     } else if (wall && y < maxCeil) {
                         // pillars in tall rooms glow so the floor is not pitch dark
-                        state = (post && type >= 0 && y == 3) ? lightPanel : wallpaper;
+                        state = (post && tallType(type) && y == 3) ? lightPanel : wallpaper;
                     } else if (!wall && y < ownCeil) {
                         if (doorHere && y == 2) {
                             state = ModBlocks.EXIT_DOOR.get().defaultBlockState()
