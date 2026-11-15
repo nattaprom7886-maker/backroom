@@ -1,0 +1,18 @@
+{
+  "itemGroup.backroomsmod": "Backrooms",
+  "block.backroomsmod.backrooms_wallpaper": "วอลเปเปอร์ Backrooms",
+  "block.backroomsmod.backrooms_carpet": "พรม Backrooms",
+  "block.backroomsmod.backrooms_ceiling_tile": "กระเบื้องเพดาน Backrooms",
+  "block.backroomsmod.backrooms_light_panel": "แผ่นไฟ Backrooms",
+  "block.backroomsmod.exit_door": "ประตูทางออก",
+  "block.backroomsmod.wood_chair": "เก้าอี้ไม้",
+  "block.backroomsmod.office_chair": "เก้าอี้ออฟฟิศ",
+  "block.backroomsmod.stop_sign": "ป้ายหยุด",
+  "block.backroomsmod.backrooms_wallpaper_peeling": "วอลเปเปอร์ลอก",
+  "block.backroomsmod.backrooms_wallpaper_stained": "วอลเปเปอร์มีรอยน้ำ",
+  "block.backroomsmod.backrooms_wallpaper_moldy": "วอลเปเปอร์ราดำ",
+  "block.backroomsmod.backrooms_wallpaper_scratched": "วอลเปเปอร์มีรอยขีดข่วน",
+  "block.backroomsmod.backrooms_carpet_wet": "พรมเปียก",
+  "subtitles.backroomsmod.light_hum": "หลอดไฟส่งเสียงฮัม",
+  "subtitles.backroomsmod.light_flicker": "ไฟกระพริบ"
+}

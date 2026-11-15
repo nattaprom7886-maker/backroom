@@ -1,0 +1,49 @@
+{
+ "variants": {
+  "facing=south,pose=upright": {
+   "model": "backroomsmod:block/wood_chair_upright"
+  },
+  "facing=south,pose=fallen": {
+   "model": "backroomsmod:block/wood_chair_fallen"
+  },
+  "facing=south,pose=sunk": {
+   "model": "backroomsmod:block/wood_chair_sunk"
+  },
+  "facing=west,pose=upright": {
+   "model": "backroomsmod:block/wood_chair_upright",
+   "y": 90
+  },
+  "facing=west,pose=fallen": {
+   "model": "backroomsmod:block/wood_chair_fallen",
+   "y": 90
+  },
+  "facing=west,pose=sunk": {
+   "model": "backroomsmod:block/wood_chair_sunk",
+   "y": 90
+  },
+  "facing=north,pose=upright": {
+   "model": "backroomsmod:block/wood_chair_upright",
+   "y": 180
+  },
+  "facing=north,pose=fallen": {
+   "model": "backroomsmod:block/wood_chair_fallen",
+   "y": 180
+  },
+  "facing=north,pose=sunk": {
+   "model": "backroomsmod:block/wood_chair_sunk",
+   "y": 180
+  },
+  "facing=east,pose=upright": {
+   "model": "backroomsmod:block/wood_chair_upright",
+   "y": 270
+  },
+  "facing=east,pose=fallen": {
+   "model": "backroomsmod:block/wood_chair_fallen",
+   "y": 270
+  },
+  "facing=east,pose=sunk": {
+   "model": "backroomsmod:block/wood_chair_sunk",
+   "y": 270
+  }
+ }
+}

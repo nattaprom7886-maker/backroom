@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "backroomsmod:block/backrooms_light_panel_off"
+  }
+}

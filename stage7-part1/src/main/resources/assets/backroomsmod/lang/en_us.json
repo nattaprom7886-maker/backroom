@@ -1,0 +1,18 @@
+{
+  "itemGroup.backroomsmod": "Backrooms",
+  "block.backroomsmod.backrooms_wallpaper": "Backrooms Wallpaper",
+  "block.backroomsmod.backrooms_carpet": "Backrooms Carpet",
+  "block.backroomsmod.backrooms_ceiling_tile": "Backrooms Ceiling Tile",
+  "block.backroomsmod.backrooms_light_panel": "Backrooms Light Panel",
+  "block.backroomsmod.exit_door": "Exit Door",
+  "block.backroomsmod.wood_chair": "Wooden Chair",
+  "block.backroomsmod.office_chair": "Office Chair",
+  "block.backroomsmod.stop_sign": "Stop Sign",
+  "block.backroomsmod.backrooms_wallpaper_peeling": "Peeling Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_stained": "Water-Stained Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_moldy": "Moldy Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_scratched": "Scratched Wallpaper",
+  "block.backroomsmod.backrooms_carpet_wet": "Wet Carpet",
+  "subtitles.backroomsmod.light_hum": "Light humming",
+  "subtitles.backroomsmod.light_flicker": "Light flickers"
+}

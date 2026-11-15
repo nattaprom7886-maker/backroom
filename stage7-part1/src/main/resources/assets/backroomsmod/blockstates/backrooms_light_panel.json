@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=true": {
+      "model": "backroomsmod:block/backrooms_light_panel"
+    },
+    "lit=false": {
+      "model": "backroomsmod:block/backrooms_light_panel_off"
+    }
+  }
+}
