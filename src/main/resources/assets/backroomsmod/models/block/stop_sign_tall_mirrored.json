@@ -15,7 +15,7 @@
    ],
    "to": [
     9,
-    16,
+    26,
     9
    ],
    "faces": {
@@ -78,12 +78,12 @@
   {
    "from": [
     2,
-    4,
+    14,
     9
    ],
    "to": [
     14,
-    16,
+    26,
     10
    ],
    "faces": {
@@ -112,7 +112,7 @@
       1,
       16
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "west": {
      "uv": [
@@ -121,7 +121,7 @@
       1,
       16
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "up": {
      "uv": [
@@ -130,7 +130,7 @@
       16,
       1
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "down": {
      "uv": [
@@ -139,7 +139,7 @@
       16,
       1
      ],
-     "texture": "#back"
+     "texture": "#pole"
     }
    }
   }

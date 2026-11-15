@@ -112,7 +112,7 @@
       1,
       16
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "west": {
      "uv": [
@@ -121,7 +121,7 @@
       1,
       16
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "up": {
      "uv": [
@@ -130,7 +130,7 @@
       16,
       1
      ],
-     "texture": "#back"
+     "texture": "#pole"
     },
     "down": {
      "uv": [
@@ -139,7 +139,7 @@
       16,
       1
      ],
-     "texture": "#back"
+     "texture": "#pole"
     }
    }
   }

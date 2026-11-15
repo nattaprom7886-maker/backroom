@@ -48,9 +48,9 @@ public class StopSignBlock extends HorizontalDirectionalBlock {
     public static final EnumProperty<Style> STYLE = EnumProperty.create("style", Style.class);
     public static final BooleanProperty MIRRORED = BooleanProperty.create("mirrored");
 
-    private static final VoxelShape TALL_SHAPE = Block.box(4, 0, 4, 12, 16, 12);
-    private static final VoxelShape SHORT_SHAPE = Block.box(5, 0, 5, 11, 11, 11);
-    private static final VoxelShape TILTED_SHAPE = Block.box(3, 0, 3, 15, 16, 13);
+    private static final VoxelShape TALL_SHAPE = Block.box(4, 0, 4, 12, 24, 12);
+    private static final VoxelShape SHORT_SHAPE = Block.box(5, 0, 5, 11, 14, 11);
+    private static final VoxelShape TILTED_SHAPE = Block.box(2, 0, 2, 14, 24, 14);
     private static final VoxelShape SUNK_SHAPE = Block.box(4, 0, 4, 12, 10, 12);
     private static final VoxelShape SUNK_TILTED_SHAPE = Block.box(3, 0, 3, 13, 10, 13);
 
