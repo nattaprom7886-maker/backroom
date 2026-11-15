@@ -1,6 +1,7 @@
 package com.backroomsmod.world;
 
 import com.backroomsmod.ModBlocks;
+import com.backroomsmod.block.ChairBlock;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.biome.BiomeManager;
 import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -30,7 +32,7 @@ import net.minecraft.world.level.levelgen.blending.Blender;
  * per edge by a hash, so every chunk agrees without needing neighbours.
  *
  * Vertical layout (min_y 0, height 16):
- *   y=0 bedrock, y=1 carpet, y=2..4 open space, y=5 ceiling, y=6..15 bedrock.
+ *   y=0 bedrock, y=1 carpet, y=2..5 open space, y=6 ceiling, y=7..15 bedrock.
  */
 public class BackroomsChunkGenerator extends ChunkGenerator {
     public static final Codec<BackroomsChunkGenerator> CODEC = RecordCodecBuilder.create(instance ->
@@ -41,10 +43,11 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     public static final int CELL = 6;
     private static final int HALL_REGION = 3;       // halls are 3x3 cells
     private static final double HALL_CHANCE = 0.28;
-    private static final double DOOR_CHANCE = 1.0 / 120.0; // chance per cell of holding the exit door
-    private static final double SPECIAL_CHANCE = 0.35;     // share of halls that hold a set piece
+    private static final double DOOR_CHANCE = 1.0 / 1500.0; // chance per cell of holding the exit door (about 1 door per ~230x230 blocks)
+    private static final double SPECIAL_CHANCE = 0.07;     // share of halls that hold a set piece (about 1 set piece per ~130x130 blocks)
+    private static final double CHAIR_CHANCE = 0.06;      // chance per cell of holding a chair arrangement
     private static final int REGION_SIZE = HALL_REGION * CELL;
-    private static final int CEIL_NORMAL = 5;
+    private static final int CEIL_NORMAL = 6;
     private static final int CEIL_TALL = 14;
 
     public BackroomsChunkGenerator(BiomeSource biomeSource) {
@@ -123,6 +126,39 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static boolean hasDoor(int cx, int cz) {
         if (ceilOfCell(cx, cz) == CEIL_TALL) return false; // set-piece rooms never hold the exit door
         return rand01(mix(cx, cz, 7)) < DOOR_CHANCE;
+    }
+
+    /**
+     * Chair arrangements: one spot per cell (never on a wall line, never in the exit-door cell or a
+     * set-piece room). Poses: upright, fallen over, sunk into the carpet, or a tall stack.
+     */
+    private static BlockState chairAt(int cx, int cz, int lx, int lz, int y) {
+        if (y < 2 || y > 5) return null;
+        if (rand01(mix(cx, cz, 20)) >= CHAIR_CHANCE) return null;
+        if (ceilOfCell(cx, cz) == CEIL_TALL || hasDoor(cx, cz)) return null;
+        int px = 1 + (int) Math.floorMod(mix(cx, cz, 21), 5L);
+        int pz = 1 + (int) Math.floorMod(mix(cx, cz, 22), 5L);
+        if (lx != px || lz != pz) return null;
+
+        double kind = rand01(mix(cx, cz, 24));
+        if (kind < 0.82) {
+            if (y != 2) return null;
+            ChairBlock.Pose pose = kind < 0.40 ? ChairBlock.Pose.UPRIGHT
+                : kind < 0.62 ? ChairBlock.Pose.FALLEN : ChairBlock.Pose.SUNK;
+            return chairState((mix(cx, cz, 23) & 1L) == 0, (int) (mix(cx, cz, 25) & 3), pose);
+        }
+        // stack of 3 or 4 chairs, each turned and mixed in type
+        int height = 3 + (int) (mix(cx, cz, 26) & 1L);
+        if (y >= 2 + height) return null;
+        return chairState((mix(cx, cz, 27 + y) & 1L) == 0, (int) (mix(cx, cz, 40 + y) & 3),
+            ChairBlock.Pose.UPRIGHT);
+    }
+
+    private static BlockState chairState(boolean office, int facing, ChairBlock.Pose pose) {
+        Block block = office ? ModBlocks.OFFICE_CHAIR.get() : ModBlocks.WOOD_CHAIR.get();
+        return block.defaultBlockState()
+            .setValue(ChairBlock.FACING, Direction.from2DDataValue(facing))
+            .setValue(ChairBlock.POSE, pose);
     }
 
     private static boolean hasLight(int cx, int cz, int lx, int lz) {
@@ -217,7 +253,9 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                                 .setValue(DoorBlock.FACING, doorFacing)
                                 .setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER);
                         } else {
-                            continue; // air
+                            BlockState chair = chairAt(cx, cz, lx, lz, y);
+                            if (chair == null) continue; // air
+                            state = chair;
                         }
                     } else if (!wall && y == ownCeil) {
                         state = light ? lightPanel : ceiling;

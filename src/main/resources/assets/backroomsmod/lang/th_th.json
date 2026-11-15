@@ -1,8 +1,10 @@
 {
   "itemGroup.backroomsmod": "Backrooms",
-  "block.backroomsmod.backrooms_wallpaper": "\u0e27\u0e2d\u0e25\u0e40\u0e1b\u0e40\u0e1b\u0e2d\u0e23\u0e4c Backrooms",
-  "block.backroomsmod.backrooms_carpet": "\u0e1e\u0e23\u0e21 Backrooms",
-  "block.backroomsmod.backrooms_ceiling_tile": "\u0e01\u0e23\u0e30\u0e40\u0e1a\u0e37\u0e49\u0e2d\u0e07\u0e40\u0e1e\u0e14\u0e32\u0e19 Backrooms",
-  "block.backroomsmod.backrooms_light_panel": "\u0e41\u0e1c\u0e48\u0e19\u0e44\u0e1f Backrooms",
-  "block.backroomsmod.exit_door": "\u0e1b\u0e23\u0e30\u0e15\u0e39\u0e17\u0e32\u0e07\u0e2d\u0e2d\u0e01"
+  "block.backroomsmod.backrooms_wallpaper": "วอลเปเปอร์ Backrooms",
+  "block.backroomsmod.backrooms_carpet": "พรม Backrooms",
+  "block.backroomsmod.backrooms_ceiling_tile": "กระเบื้องเพดาน Backrooms",
+  "block.backroomsmod.backrooms_light_panel": "แผ่นไฟ Backrooms",
+  "block.backroomsmod.exit_door": "ประตูทางออก",
+  "block.backroomsmod.wood_chair": "เก้าอี้ไม้",
+  "block.backroomsmod.office_chair": "เก้าอี้ออฟฟิศ"
 }
