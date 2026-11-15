@@ -1,0 +1,147 @@
+{
+ "render_type": "minecraft:cutout",
+ "textures": {
+  "sign": "backroomsmod:block/stop_sign",
+  "back": "backroomsmod:block/stop_sign_back",
+  "pole": "backroomsmod:block/stop_sign_pole",
+  "particle": "backroomsmod:block/stop_sign_pole"
+ },
+ "elements": [
+  {
+   "from": [
+    7,
+    0,
+    7
+   ],
+   "to": [
+    9,
+    10,
+    9
+   ],
+   "faces": {
+    "north": {
+     "uv": [
+      0,
+      0,
+      2,
+      16
+     ],
+     "texture": "#pole"
+    },
+    "south": {
+     "uv": [
+      0,
+      0,
+      2,
+      16
+     ],
+     "texture": "#pole"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      2,
+      16
+     ],
+     "texture": "#pole"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      2,
+      16
+     ],
+     "texture": "#pole"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#pole"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      2,
+      2
+     ],
+     "texture": "#pole"
+    }
+   }
+  },
+  {
+   "from": [
+    4,
+    3,
+    9
+   ],
+   "to": [
+    12,
+    11,
+    10
+   ],
+   "faces": {
+    "south": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#sign"
+    },
+    "north": {
+     "uv": [
+      0,
+      0,
+      16,
+      16
+     ],
+     "texture": "#back"
+    },
+    "east": {
+     "uv": [
+      0,
+      0,
+      1,
+      16
+     ],
+     "texture": "#back"
+    },
+    "west": {
+     "uv": [
+      0,
+      0,
+      1,
+      16
+     ],
+     "texture": "#back"
+    },
+    "up": {
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ],
+     "texture": "#back"
+    },
+    "down": {
+     "uv": [
+      0,
+      0,
+      16,
+      1
+     ],
+     "texture": "#back"
+    }
+   }
+  }
+ ]
+}

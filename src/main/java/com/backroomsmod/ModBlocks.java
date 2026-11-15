@@ -2,6 +2,7 @@ package com.backroomsmod;
 
 import com.backroomsmod.block.ChairBlock;
 import com.backroomsmod.block.ExitDoorBlock;
+import com.backroomsmod.block.StopSignBlock;
 import java.util.function.Supplier;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.DoubleHighBlockItem;
@@ -37,6 +38,9 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> OFFICE_CHAIR = block("office_chair",
         () -> new ChairBlock(chair(MapColor.COLOR_GRAY, SoundType.METAL)));
+
+    public static final RegistryObject<Block> STOP_SIGN = block("stop_sign",
+        () -> new StopSignBlock(chair(MapColor.COLOR_RED, SoundType.METAL)));
 
     public static final RegistryObject<Block> EXIT_DOOR = BLOCKS.register("exit_door",
         () -> new ExitDoorBlock(BlockBehaviour.Properties.of()

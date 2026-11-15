@@ -2,6 +2,7 @@ package com.backroomsmod.world;
 
 import com.backroomsmod.ModBlocks;
 import com.backroomsmod.block.ChairBlock;
+import com.backroomsmod.block.StopSignBlock;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
@@ -46,6 +47,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static final double DOOR_CHANCE = 1.0 / 1500.0; // chance per cell of holding the exit door (about 1 door per ~230x230 blocks)
     private static final double SPECIAL_CHANCE = 0.035;    // share of halls that hold a set piece (about 1 set piece per ~180x180 blocks)
     private static final double CHAIR_CHANCE = 0.06;      // chance per cell of holding a chair arrangement
+    private static final double SIGN_CHANCE = 0.05;      // chance per cell of holding a stop sign
     private static final int REGION_SIZE = HALL_REGION * CELL;
     private static final int CEIL_NORMAL = 6;
     private static final int CEIL_TALL = 14;
@@ -169,6 +171,27 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
             .setValue(ChairBlock.POSE, pose);
     }
 
+    /**
+     * Stop signs: one spot per cell, random style (tall, short, tilted, sunk, sunk and tilted),
+     * facing and lettering (correct or mirrored). A chair on the same spot wins.
+     */
+    private static BlockState signAt(int cx, int cz, int lx, int lz, int y) {
+        if (y != 2) return null;
+        if (rand01(mix(cx, cz, 50)) >= SIGN_CHANCE) return null;
+        if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
+        int px = 1 + (int) Math.floorMod(mix(cx, cz, 51), 5L);
+        int pz = 1 + (int) Math.floorMod(mix(cx, cz, 52), 5L);
+        if (lx != px || lz != pz) return null;
+
+        StopSignBlock.Style[] styles = StopSignBlock.Style.values();
+        StopSignBlock.Style style = styles[(int) Math.floorMod(mix(cx, cz, 53), (long) styles.length)];
+        boolean mirrored = rand01(mix(cx, cz, 54)) < 0.5;
+        return ModBlocks.STOP_SIGN.get().defaultBlockState()
+            .setValue(StopSignBlock.FACING, Direction.from2DDataValue((int) (mix(cx, cz, 55) & 3)))
+            .setValue(StopSignBlock.STYLE, style)
+            .setValue(StopSignBlock.MIRRORED, mirrored);
+    }
+
     private static boolean hasLight(int cx, int cz, int lx, int lz) {
         if (lx < 2 || lx > 3 || lz < 2 || lz > 3) return false;
         if (hasDoor(cx, cz)) return true;
@@ -263,6 +286,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                                 .setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER);
                         } else {
                             BlockState chair = chairAt(cx, cz, lx, lz, y);
+                            if (chair == null) chair = signAt(cx, cz, lx, lz, y);
                             if (chair == null) continue; // air
                             state = chair;
                         }

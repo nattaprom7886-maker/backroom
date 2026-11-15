@@ -1,0 +1,154 @@
+{
+ "variants": {
+  "facing=south,mirrored=false,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall"
+  },
+  "facing=south,mirrored=false,style=short": {
+   "model": "backroomsmod:block/stop_sign_short"
+  },
+  "facing=south,mirrored=false,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted"
+  },
+  "facing=south,mirrored=false,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk"
+  },
+  "facing=south,mirrored=false,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted"
+  },
+  "facing=south,mirrored=true,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall_mirrored"
+  },
+  "facing=south,mirrored=true,style=short": {
+   "model": "backroomsmod:block/stop_sign_short_mirrored"
+  },
+  "facing=south,mirrored=true,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted_mirrored"
+  },
+  "facing=south,mirrored=true,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk_mirrored"
+  },
+  "facing=south,mirrored=true,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted_mirrored"
+  },
+  "facing=west,mirrored=false,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall",
+   "y": 90
+  },
+  "facing=west,mirrored=false,style=short": {
+   "model": "backroomsmod:block/stop_sign_short",
+   "y": 90
+  },
+  "facing=west,mirrored=false,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted",
+   "y": 90
+  },
+  "facing=west,mirrored=false,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk",
+   "y": 90
+  },
+  "facing=west,mirrored=false,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted",
+   "y": 90
+  },
+  "facing=west,mirrored=true,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall_mirrored",
+   "y": 90
+  },
+  "facing=west,mirrored=true,style=short": {
+   "model": "backroomsmod:block/stop_sign_short_mirrored",
+   "y": 90
+  },
+  "facing=west,mirrored=true,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted_mirrored",
+   "y": 90
+  },
+  "facing=west,mirrored=true,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk_mirrored",
+   "y": 90
+  },
+  "facing=west,mirrored=true,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted_mirrored",
+   "y": 90
+  },
+  "facing=north,mirrored=false,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall",
+   "y": 180
+  },
+  "facing=north,mirrored=false,style=short": {
+   "model": "backroomsmod:block/stop_sign_short",
+   "y": 180
+  },
+  "facing=north,mirrored=false,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted",
+   "y": 180
+  },
+  "facing=north,mirrored=false,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk",
+   "y": 180
+  },
+  "facing=north,mirrored=false,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted",
+   "y": 180
+  },
+  "facing=north,mirrored=true,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall_mirrored",
+   "y": 180
+  },
+  "facing=north,mirrored=true,style=short": {
+   "model": "backroomsmod:block/stop_sign_short_mirrored",
+   "y": 180
+  },
+  "facing=north,mirrored=true,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted_mirrored",
+   "y": 180
+  },
+  "facing=north,mirrored=true,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk_mirrored",
+   "y": 180
+  },
+  "facing=north,mirrored=true,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted_mirrored",
+   "y": 180
+  },
+  "facing=east,mirrored=false,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall",
+   "y": 270
+  },
+  "facing=east,mirrored=false,style=short": {
+   "model": "backroomsmod:block/stop_sign_short",
+   "y": 270
+  },
+  "facing=east,mirrored=false,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted",
+   "y": 270
+  },
+  "facing=east,mirrored=false,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk",
+   "y": 270
+  },
+  "facing=east,mirrored=false,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted",
+   "y": 270
+  },
+  "facing=east,mirrored=true,style=tall": {
+   "model": "backroomsmod:block/stop_sign_tall_mirrored",
+   "y": 270
+  },
+  "facing=east,mirrored=true,style=short": {
+   "model": "backroomsmod:block/stop_sign_short_mirrored",
+   "y": 270
+  },
+  "facing=east,mirrored=true,style=tilted": {
+   "model": "backroomsmod:block/stop_sign_tilted_mirrored",
+   "y": 270
+  },
+  "facing=east,mirrored=true,style=sunk": {
+   "model": "backroomsmod:block/stop_sign_sunk_mirrored",
+   "y": 270
+  },
+  "facing=east,mirrored=true,style=sunk_tilted": {
+   "model": "backroomsmod:block/stop_sign_sunk_tilted_mirrored",
+   "y": 270
+  }
+ }
+}
