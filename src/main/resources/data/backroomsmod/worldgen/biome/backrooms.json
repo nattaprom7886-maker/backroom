@@ -6,7 +6,13 @@
     "fog_color": 4866080,
     "sky_color": 4866080,
     "water_color": 4159204,
-    "water_fog_color": 329011
+    "water_fog_color": 329011,
+    "music": {
+      "sound": "backroomsmod:backrooms_music",
+      "min_delay": 600,
+      "max_delay": 2400,
+      "replace_current_music": true
+    }
   },
   "spawners": {
     "monster": [],

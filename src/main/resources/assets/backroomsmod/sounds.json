@@ -10,5 +10,21 @@
       "backroomsmod:light_flicker"
     ],
     "subtitle": "subtitles.backroomsmod.light_flicker"
+  },
+  "backrooms_music": {
+    "sounds": [
+      {
+        "name": "backroomsmod:music/backrooms_1",
+        "stream": true
+      },
+      {
+        "name": "backroomsmod:music/backrooms_2",
+        "stream": true
+      },
+      {
+        "name": "backroomsmod:music/backrooms_3",
+        "stream": true
+      }
+    ]
   }
 }

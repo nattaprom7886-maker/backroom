@@ -61,15 +61,16 @@ public final class LightFlicker {
         }
 
         double mx = cx * cell + 3.0, mz = cz * cell + 3.0;
-        if (changedOff) {
-            level.playSound(null, mx, y, mz, ModSounds.LIGHT_FLICKER.get(), SoundSource.BLOCKS, 0.8F,
+        // a soft click, only now and then, so a flickering tube is not a machine gun
+        if (changedOff && level.random.nextInt(3) == 0) {
+            level.playSound(null, mx, y, mz, ModSounds.LIGHT_FLICKER.get(), SoundSource.BLOCKS, 0.18F,
                 0.9F + level.random.nextFloat() * 0.3F);
         }
         // hum: the sound is 2 s long, so each light restarts it every 40 ticks (staggered per cell)
         if (hum && shouldBeLit && Math.floorMod(t + cx * 7L + cz * 13L, 40L) < 2) {
             boolean loud = BackroomsChunkGenerator.nearDarkZone(cx, cz);
             level.playSound(null, mx, y, mz, ModSounds.LIGHT_HUM.get(), SoundSource.BLOCKS,
-                loud ? 1.6F : 0.5F, loud ? 1.12F : 1.0F);
+                loud ? 0.30F : 0.10F, loud ? 1.08F : 1.0F);
         }
     }
 }

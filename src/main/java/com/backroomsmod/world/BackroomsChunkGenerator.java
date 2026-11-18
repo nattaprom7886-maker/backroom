@@ -256,12 +256,22 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         return rand01(mix(Math.floorDiv(x, 24), Math.floorDiv(z, 24), 61)) < 0.3;
     }
 
+    /**
+     * Wall wear is rare and clustered: most walls are clean wallpaper. Only a few small patches
+     * (about 8 x 8 blocks, ~14% of the map) are worn, and inside a patch only a minority of blocks
+     * are marked, so damage reads as "this corner is old" instead of noise on every wall.
+     */
+    private static boolean wornPatch(int x, int z) {
+        return rand01(mix(Math.floorDiv(x, 8), Math.floorDiv(z, 8), 63)) < 0.14;
+    }
+
     private static BlockState wallBlock(int x, int y, int z) {
-        double damp = dampZone(x, z) ? 2.5 : 1.0;
-        double pStain = (y >= 4 ? 0.12 : 0.04) * damp;
-        double pMold = (y <= 2 ? 0.14 : 0.03) * damp;
-        double pPeel = 0.07;
-        double pScratch = 0.06;
+        boolean worn = wornPatch(x, z);
+        boolean damp = dampZone(x, z);
+        double pStain = worn ? (y >= 4 ? 0.10 : 0.03) : 0.002;
+        double pMold = worn ? (y <= 2 && damp ? 0.14 : 0.01) : 0.0;
+        double pPeel = worn ? 0.05 : 0.002;
+        double pScratch = worn ? 0.03 : 0.002;
         double r = rand01(mix(x, z * 16L + y, 62));
         if (r < pStain) return ModBlocks.WALLPAPER_STAINED.get().defaultBlockState();
         r -= pStain;
