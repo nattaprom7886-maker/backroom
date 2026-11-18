@@ -1,0 +1,11 @@
+{
+ "variants": {
+  "axis=x": {
+   "model": "backroomsmod:block/backrooms_balustrade"
+  },
+  "axis=z": {
+   "model": "backroomsmod:block/backrooms_balustrade",
+   "y": 90
+  }
+ }
+}

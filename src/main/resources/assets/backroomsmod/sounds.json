@@ -1,0 +1,14 @@
+{
+  "light_hum": {
+    "sounds": [
+      "backroomsmod:light_hum"
+    ],
+    "subtitle": "subtitles.backroomsmod.light_hum"
+  },
+  "light_flicker": {
+    "sounds": [
+      "backroomsmod:light_flicker"
+    ],
+    "subtitle": "subtitles.backroomsmod.light_flicker"
+  }
+}

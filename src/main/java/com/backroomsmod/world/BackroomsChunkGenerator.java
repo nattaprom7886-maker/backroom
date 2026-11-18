@@ -1,7 +1,10 @@
 package com.backroomsmod.world;
 
 import com.backroomsmod.ModBlocks;
+import com.backroomsmod.block.ArchCornerBlock;
+import com.backroomsmod.block.BalustradeBlock;
 import com.backroomsmod.block.ChairBlock;
+import com.backroomsmod.block.LightPanelBlock;
 import com.backroomsmod.block.StopSignBlock;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -48,6 +51,9 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static final double SPECIAL_CHANCE = 0.035;    // share of halls that hold a set piece (about 1 set piece per ~180x180 blocks)
     private static final double CHAIR_CHANCE = 0.06;      // chance per cell of holding a chair arrangement
     private static final double SIGN_CHANCE = 0.05;      // chance per cell of holding a stop sign
+    private static final int ZONE_CELLS = 4;         // lights go out per zone of 4x4 cells (24x24 blocks)
+    private static final double DARK_ZONE_CHANCE = 0.2; // share of zones whose lights are all out
+    private static final double FAULTY_LIGHT_CHANCE = 0.3; // share of lit cells whose lights flicker
     private static final int REGION_SIZE = HALL_REGION * CELL;
     private static final int CEIL_NORMAL = 6;
     private static final int CEIL_TALL = 14;
@@ -63,7 +69,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
 
     // ---------- deterministic hashing ----------
 
-    private static long mix(long x, long z, long salt) {
+    public static long mix(long x, long z, long salt) {
         long h = x * 0x9E3779B97F4A7C15L ^ z * 0xC2B2AE3D27D4EB4FL ^ salt * 0x165667B19E3779F9L;
         h ^= h >>> 32;
         h *= 0xD6E8FEB86659FD93L;
@@ -73,17 +79,22 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         return h;
     }
 
-    private static double rand01(long h) {
+    public static double rand01(long h) {
         return (h >>> 11) / (double) (1L << 53);
     }
 
     // ---------- layout rules ----------
 
-    /** 0 = open, 1 = wall with a doorway, 2 = solid wall. */
+    /** 0 = open, 1 = wall with a doorway, 2 = solid wall, 3 = arched doorway, 4 = framed doorway. */
     private static int baseEdge(int salt, int cx, int cz) {
         double r = rand01(mix(cx, cz, salt));
         if (r < 0.22) return 2;
-        if (r < 0.55) return 1;
+        if (r < 0.55) {
+            double k = rand01(mix(cx, cz, salt + 100));
+            if (k < 0.28) return 3; // arched doorway (wide, rounded top)
+            if (k < 0.48) return 4; // door frame without a door (dark wood trim)
+            return 1;
+        }
         return 0;
     }
 
@@ -129,7 +140,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         return specialType(Math.floorDiv(cx, HALL_REGION), Math.floorDiv(cz, HALL_REGION));
     }
 
-    private static int ceilOfCell(int cx, int cz) {
+    public static int ceilOfCell(int cx, int cz) {
         return tallType(cellSpecialType(cx, cz)) ? CEIL_TALL : CEIL_NORMAL;
     }
 
@@ -146,6 +157,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         if (y < 2 || y > 5) return null;
         if (rand01(mix(cx, cz, 20)) >= CHAIR_CHANCE) return null;
         if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
+        if (structureAt(cx * CELL + lx, cz * CELL + lz, cx, cz, lx, lz, 2) != null) return null;
         int px = 1 + (int) Math.floorMod(mix(cx, cz, 21), 5L);
         int pz = 1 + (int) Math.floorMod(mix(cx, cz, 22), 5L);
         if (lx != px || lz != pz) return null;
@@ -176,9 +188,10 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
      * facing and lettering (correct or mirrored). A chair on the same spot wins.
      */
     private static BlockState signAt(int cx, int cz, int lx, int lz, int y) {
-        if (y != 2) return null;
+        if (y < 2 || y > 4) return null;
         if (rand01(mix(cx, cz, 50)) >= SIGN_CHANCE) return null;
         if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
+        if (structureAt(cx * CELL + lx, cz * CELL + lz, cx, cz, lx, lz, 2) != null) return null;
         int px = 1 + (int) Math.floorMod(mix(cx, cz, 51), 5L);
         int pz = 1 + (int) Math.floorMod(mix(cx, cz, 52), 5L);
         if (lx != px || lz != pz) return null;
@@ -186,10 +199,162 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         StopSignBlock.Style[] styles = StopSignBlock.Style.values();
         StopSignBlock.Style style = styles[(int) Math.floorMod(mix(cx, cz, 53), (long) styles.length)];
         boolean mirrored = rand01(mix(cx, cz, 54)) < 0.5;
+        if (style != StopSignBlock.Style.TALL && y != 2) return null; // only the tall sign is 3 blocks high
+        if (chairAt(cx, cz, lx, lz, 2) != null) return null;          // a chair on the same spot wins
         return ModBlocks.STOP_SIGN.get().defaultBlockState()
             .setValue(StopSignBlock.FACING, Direction.from2DDataValue((int) (mix(cx, cz, 55) & 3)))
             .setValue(StopSignBlock.STYLE, style)
-            .setValue(StopSignBlock.MIRRORED, mirrored);
+            .setValue(StopSignBlock.MIRRORED, mirrored)
+            .setValue(StopSignBlock.PART, style == StopSignBlock.Style.TALL ? y - 2 : 0);
+    }
+
+    // ---------- lights: dark zones and flickering (used by LightFlicker) ----------
+
+    private static boolean zoneDark(int cx, int cz) {
+        return rand01(mix(Math.floorDiv(cx, ZONE_CELLS), Math.floorDiv(cz, ZONE_CELLS), 60)) < DARK_ZONE_CHANCE;
+    }
+
+    /** True when the cell holds ceiling lights. */
+    public static boolean lightCell(int cx, int cz) {
+        return hasLight(cx, cz, 2, 2);
+    }
+
+    /** Lights that are on when the chunk is first generated. */
+    private static boolean litAtGen(int cx, int cz) {
+        return hasDoor(cx, cz) || !zoneDark(cx, cz);
+    }
+
+    /** True when a neighbouring zone is dark, so the surviving lights here hum louder. */
+    public static boolean nearDarkZone(int cx, int cz) {
+        int zx = Math.floorDiv(cx, ZONE_CELLS), zz = Math.floorDiv(cz, ZONE_CELLS);
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if ((dx != 0 || dz != 0) && rand01(mix(zx + dx, zz + dz, 60)) < DARK_ZONE_CHANCE) return true;
+            }
+        }
+        return false;
+    }
+
+    /** Whether this cell's lights should be on at game time t (stateless, so every chunk agrees). */
+    public static boolean lightLitAt(int cx, int cz, long t) {
+        if (hasDoor(cx, cz)) return true; // the exit stays lit
+        if (zoneDark(cx, cz)) {
+            // a dead zone: now and then one light sputters back on for a moment
+            if (rand01(mix(cx, cz, 2000 + t / 200)) < 0.04) {
+                return rand01(mix(cx, cz, 6000 + t / 3)) > 0.6;
+            }
+            return false;
+        }
+        if (rand01(mix(cx, cz, 70)) >= FAULTY_LIGHT_CHANCE) return true; // healthy light
+        if (rand01(mix(cx, cz, 1000 + t / 100)) >= 0.35) return true;     // no fit this time
+        return rand01(mix(cx, cz, 5000 + t / 3)) > 0.45;                  // flickering burst
+    }
+
+    // ---------- damaged walls and wet carpet ----------
+
+    private static boolean dampZone(int x, int z) {
+        return rand01(mix(Math.floorDiv(x, 24), Math.floorDiv(z, 24), 61)) < 0.3;
+    }
+
+    private static BlockState wallBlock(int x, int y, int z) {
+        double damp = dampZone(x, z) ? 2.5 : 1.0;
+        double pStain = (y >= 4 ? 0.12 : 0.04) * damp;
+        double pMold = (y <= 2 ? 0.14 : 0.03) * damp;
+        double pPeel = 0.07;
+        double pScratch = 0.06;
+        double r = rand01(mix(x, z * 16L + y, 62));
+        if (r < pStain) return ModBlocks.WALLPAPER_STAINED.get().defaultBlockState();
+        r -= pStain;
+        if (r < pMold) return ModBlocks.WALLPAPER_MOLDY.get().defaultBlockState();
+        r -= pMold;
+        if (r < pPeel) return ModBlocks.WALLPAPER_PEELING.get().defaultBlockState();
+        r -= pPeel;
+        if (r < pScratch) return ModBlocks.WALLPAPER_SCRATCHED.get().defaultBlockState();
+        if (y == 3 && rand01(mix(Math.floorDiv(x, 18), Math.floorDiv(z, 18), 67)) < 0.45) {
+            return ModBlocks.WALLPAPER_TRIM.get().defaultBlockState(); // wooden chair rail
+        }
+        return ModBlocks.WALLPAPER.get().defaultBlockState();
+    }
+
+    // ---------- ceiling decorations, floor light patches, hall structures ----------
+
+    private static BlockState ceilingDecor(int x, int z, BlockState plain) {
+        double r = rand01(mix(x, z, 80));
+        if (r < 0.012) return ModBlocks.CEILING_HOLE.get().defaultBlockState();
+        if (r < 0.022) return ModBlocks.CEILING_VENT.get().defaultBlockState();
+        return plain;
+    }
+
+    /** A 2x1 patch of brighter carpet, as if light fell through a hole in the ceiling. */
+    private static boolean litPatchAt(int cx, int cz, int lx, int lz) {
+        if (rand01(mix(cx, cz, 81)) >= 0.05) return false;
+        int px = 1 + (int) Math.floorMod(mix(cx, cz, 82), 3L);
+        int pz = 1 + (int) Math.floorMod(mix(cx, cz, 83), 4L);
+        return lz == pz && (lx == px || lx == px + 1);
+    }
+
+    /** 0 plain, 1 pillar grid, 2 half-wall partitions, 3 long balustrade railing. */
+    private static int hallStyle(int rx, int rz) {
+        double r = rand01(mix(rx, rz, 90));
+        if (r < 0.25) return 0;
+        if (r < 0.55) return 1;
+        if (r < 0.80) return 2;
+        return 3;
+    }
+
+    /** Furniture-like structures inside ordinary halls (never in set-piece rooms or the door cell). */
+    private static BlockState structureAt(int x, int z, int cx, int cz, int lx, int lz, int y) {
+        if (y < 2 || y > 5) return null;
+        int rx = Math.floorDiv(cx, HALL_REGION), rz = Math.floorDiv(cz, HALL_REGION);
+        if (!isHall(rx, rz) || specialType(rx, rz) >= 0 || hasDoor(cx, cz)) return null;
+        switch (hallStyle(rx, rz)) {
+            case 1:
+                if (lx >= 3 && lx <= 4 && lz >= 3 && lz <= 4 && rand01(mix(cx, cz, 91)) < 0.7) {
+                    return wallBlock(x, y, z); // thick 2x2 pillar reaching the ceiling
+                }
+                return null;
+            case 2: {
+                if (y != 2 || rand01(mix(cx, cz, 92)) >= 0.55) return null;
+                int p = 2 + (int) Math.floorMod(mix(cx, cz, 93), 3L);
+                boolean alongX = (mix(cx, cz, 94) & 1L) == 0;
+                boolean hit = alongX ? (lz == p && lx >= 1 && lx <= 4) : (lx == p && lz >= 1 && lz <= 4);
+                return hit ? ModBlocks.HALF_WALL.get().defaultBlockState() : null;
+            }
+            case 3: {
+                if (y != 2) return null;
+                boolean alongX = (mix(rx, rz, 95) & 1L) == 0;
+                int hx = Math.floorMod(x, REGION_SIZE), hz = Math.floorMod(z, REGION_SIZE);
+                int along = alongX ? hx : hz, across = alongX ? hz : hx;
+                if (across != REGION_SIZE / 2 || along < 2 || along > 15 || along == 8 || along == 9) return null;
+                return ModBlocks.BALUSTRADE.get().defaultBlockState()
+                    .setValue(BalustradeBlock.AXIS, alongX ? Direction.Axis.X : Direction.Axis.Z);
+            }
+            default:
+                return null;
+        }
+    }
+
+    private static BlockState archCorner(int esalt, int el) {
+        Direction facing = esalt == 1 ? (el == 1 ? Direction.SOUTH : Direction.NORTH)
+                                      : (el == 1 ? Direction.EAST : Direction.WEST);
+        return ModBlocks.ARCH_CORNER.get().defaultBlockState().setValue(ArchCornerBlock.FACING, facing);
+    }
+
+    /** Puddles of soaked carpet: round blobs of radius 1-2.3 scattered per 5x5 tile. */
+    private static boolean wetCarpetAt(int x, int z) {
+        int tx0 = Math.floorDiv(x, 5), tz0 = Math.floorDiv(z, 5);
+        for (int tx = tx0 - 1; tx <= tx0 + 1; tx++) {
+            for (int tz = tz0 - 1; tz <= tz0 + 1; tz++) {
+                double chance = dampZone(tx * 5, tz * 5) ? 0.45 : 0.12;
+                if (rand01(mix(tx, tz, 63)) >= chance) continue;
+                double bx = tx * 5 + 0.5 + rand01(mix(tx, tz, 64)) * 4;
+                double bz = tz * 5 + 0.5 + rand01(mix(tx, tz, 65)) * 4;
+                double rad = 1.0 + rand01(mix(tx, tz, 66)) * 1.3;
+                double dx = x + 0.5 - bx, dz = z + 0.5 - bz;
+                if (dx * dx + dz * dz <= rad * rad) return true;
+            }
+        }
+        return false;
     }
 
     private static boolean hasLight(int cx, int cz, int lx, int lz) {
@@ -209,6 +374,11 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
         BlockState wallpaper = ModBlocks.WALLPAPER.get().defaultBlockState();
         BlockState ceiling = ModBlocks.CEILING_TILE.get().defaultBlockState();
         BlockState lightPanel = ModBlocks.LIGHT_PANEL.get().defaultBlockState();
+        BlockState lightOff = lightPanel.setValue(LightPanelBlock.LIT, Boolean.FALSE);
+        BlockState wetCarpet = ModBlocks.CARPET_WET.get().defaultBlockState();
+        BlockState litCarpet = ModBlocks.CARPET_LIT.get().defaultBlockState();
+        BlockState frame = ModBlocks.DOOR_FRAME.get().defaultBlockState();
+        BlockState window = ModBlocks.WINDOW.get().defaultBlockState();
 
         Heightmap oceanFloor = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.OCEAN_FLOOR_WG);
         Heightmap worldSurface = chunk.getOrCreateHeightmapUnprimed(Heightmap.Types.WORLD_SURFACE_WG);
@@ -243,13 +413,21 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                     wall = true; // corner post
                 } else if (lx == 0) {
                     int t = edgeType(1, cx, cz);
-                    wall = t == 2 || (t == 1 && !(lz == 2 || lz == 3));
+                    wall = t == 2 || (t != 0 && !(lz == 2 || lz == 3));
                 } else if (lz == 0) {
                     int t = edgeType(2, cx, cz);
-                    wall = t == 2 || (t == 1 && !(lx == 2 || lx == 3));
+                    wall = t == 2 || (t != 0 && !(lx == 2 || lx == 3));
                 } else {
                     wall = false;
                 }
+
+                int et = 0, el = 0, esalt = 0;
+                if (!post) {
+                    if (lx == 0) { esalt = 1; et = edgeType(1, cx, cz); el = lz; }
+                    else if (lz == 0) { esalt = 2; et = edgeType(2, cx, cz); el = lx; }
+                }
+                boolean archEdge = et == 3, frameEdge = et == 4;
+                boolean windowEdge = et == 2 && el >= 1 && el <= 4 && rand01(mix(cx, cz, esalt + 200)) < 0.16;
 
                 boolean doorHere = hasDoor(cx, cz) && lx == CELL / 2 && lz == CELL / 2;
                 boolean light = hasLight(cx, cz, lx, lz);
@@ -265,17 +443,28 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
 
                 for (int y = 0; y < 16; y++) {
                     BlockState state;
+                    boolean w = wall;
+                    BlockState edgeState = null;
+                    if (archEdge && (el == 1 || el == 4)) {
+                        if (y == 2 || y == 3) w = false;              // wider opening
+                        else if (y == 4) edgeState = archCorner(esalt, el); // rounded shoulder
+                    } else if (frameEdge) {
+                        if ((el == 1 || el == 4) && y >= 2 && y <= 4) edgeState = frame;
+                        else if ((el == 2 || el == 3) && y >= 5) { w = true; if (y == 5) edgeState = frame; }
+                    }
+                    if (windowEdge && w && (y == 4 || y == 5)) edgeState = window;
                     BlockState pieceState = (inPiece && y >= 1) ? SetPieces.get(type, pdx, y, pdz) : null;
                     if (y == 0) {
                         state = bedrock;
                     } else if (pieceState != null) {
                         state = pieceState;
                     } else if (y == 1) {
-                        state = carpet;
-                    } else if (wall && y < maxCeil) {
+                        state = wetCarpetAt(x, z) ? wetCarpet : litPatchAt(cx, cz, lx, lz) ? litCarpet : carpet;
+                    } else if (w && y < maxCeil) {
                         // pillars in tall rooms glow so the floor is not pitch dark
-                        state = (post && tallType(type) && y == 3) ? lightPanel : wallpaper;
-                    } else if (!wall && y < ownCeil) {
+                        state = edgeState != null ? edgeState
+                            : (post && tallType(type) && y == 3) ? lightPanel : wallBlock(x, y, z);
+                    } else if (!w && y < ownCeil) {
                         if (doorHere && y == 2) {
                             state = ModBlocks.EXIT_DOOR.get().defaultBlockState()
                                 .setValue(DoorBlock.FACING, doorFacing)
@@ -285,17 +474,18 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                                 .setValue(DoorBlock.FACING, doorFacing)
                                 .setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER);
                         } else {
-                            BlockState chair = chairAt(cx, cz, lx, lz, y);
+                            BlockState chair = structureAt(x, z, cx, cz, lx, lz, y);
+                            if (chair == null) chair = chairAt(cx, cz, lx, lz, y);
                             if (chair == null) chair = signAt(cx, cz, lx, lz, y);
                             if (chair == null) continue; // air
                             state = chair;
                         }
-                    } else if (!wall && y == ownCeil) {
-                        state = light ? lightPanel : ceiling;
+                    } else if (!w && y == ownCeil) {
+                        state = light ? (litAtGen(cx, cz) ? lightPanel : lightOff) : ceilingDecor(x, z, ceiling);
                     } else if (y == maxCeil) {
                         state = ceiling;
-                    } else if (!wall && lineColumn && y > ownCeil && y < maxCeil) {
-                        state = wallpaper;
+                    } else if (!w && lineColumn && y > ownCeil && y < maxCeil) {
+                        state = wallBlock(x, y, z);
                     } else {
                         state = bedrock;
                     }

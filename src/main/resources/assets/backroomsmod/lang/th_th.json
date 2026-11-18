@@ -7,5 +7,21 @@
   "block.backroomsmod.exit_door": "ประตูทางออก",
   "block.backroomsmod.wood_chair": "เก้าอี้ไม้",
   "block.backroomsmod.office_chair": "เก้าอี้ออฟฟิศ",
-  "block.backroomsmod.stop_sign": "ป้ายหยุด"
+  "block.backroomsmod.stop_sign": "ป้ายหยุด",
+  "block.backroomsmod.backrooms_wallpaper_peeling": "วอลเปเปอร์ลอก",
+  "block.backroomsmod.backrooms_wallpaper_stained": "วอลเปเปอร์มีรอยน้ำ",
+  "block.backroomsmod.backrooms_wallpaper_moldy": "วอลเปเปอร์ราดำ",
+  "block.backroomsmod.backrooms_wallpaper_scratched": "วอลเปเปอร์มีรอยขีดข่วน",
+  "block.backroomsmod.backrooms_carpet_wet": "พรมเปียก",
+  "subtitles.backroomsmod.light_hum": "หลอดไฟส่งเสียงฮัม",
+  "subtitles.backroomsmod.light_flicker": "ไฟกระพริบ",
+  "block.backroomsmod.backrooms_wallpaper_trim": "วอลเปเปอร์คิ้วไม้",
+  "block.backroomsmod.backrooms_ceiling_hole": "เพดานมีรูดำ",
+  "block.backroomsmod.backrooms_ceiling_vent": "ช่องแอร์เพดาน",
+  "block.backroomsmod.backrooms_carpet_lit": "พรมแสงตกพื้น",
+  "block.backroomsmod.backrooms_window": "หน้าต่างบานเกล็ด",
+  "block.backroomsmod.backrooms_door_frame": "กรอบประตู",
+  "block.backroomsmod.backrooms_half_wall": "กำแพงเตี้ย",
+  "block.backroomsmod.backrooms_balustrade": "ราวไม้ระเบียง",
+  "block.backroomsmod.backrooms_arch_corner": "มุมซุ้มโค้ง"
 }

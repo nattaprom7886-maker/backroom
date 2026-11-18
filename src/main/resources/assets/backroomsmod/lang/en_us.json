@@ -7,5 +7,21 @@
   "block.backroomsmod.exit_door": "Exit Door",
   "block.backroomsmod.wood_chair": "Wooden Chair",
   "block.backroomsmod.office_chair": "Office Chair",
-  "block.backroomsmod.stop_sign": "Stop Sign"
+  "block.backroomsmod.stop_sign": "Stop Sign",
+  "block.backroomsmod.backrooms_wallpaper_peeling": "Peeling Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_stained": "Water-Stained Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_moldy": "Moldy Wallpaper",
+  "block.backroomsmod.backrooms_wallpaper_scratched": "Scratched Wallpaper",
+  "block.backroomsmod.backrooms_carpet_wet": "Wet Carpet",
+  "subtitles.backroomsmod.light_hum": "Light humming",
+  "subtitles.backroomsmod.light_flicker": "Light flickers",
+  "block.backroomsmod.backrooms_wallpaper_trim": "Wallpaper with Wood Trim",
+  "block.backroomsmod.backrooms_ceiling_hole": "Ceiling with Hole",
+  "block.backroomsmod.backrooms_ceiling_vent": "Ceiling Vent",
+  "block.backroomsmod.backrooms_carpet_lit": "Lit Carpet Patch",
+  "block.backroomsmod.backrooms_window": "Paned Window",
+  "block.backroomsmod.backrooms_door_frame": "Door Frame",
+  "block.backroomsmod.backrooms_half_wall": "Half Wall",
+  "block.backroomsmod.backrooms_balustrade": "Wooden Balustrade",
+  "block.backroomsmod.backrooms_arch_corner": "Arch Corner"
 }

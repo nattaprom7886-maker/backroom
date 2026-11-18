@@ -21,7 +21,9 @@ public class BackroomsMod {
         ModBlocks.ITEMS.register(bus);
         ModDimensions.CHUNK_GENERATORS.register(bus);
         ModCreativeTabs.TABS.register(bus);
+        ModSounds.SOUNDS.register(bus);
         MinecraftForge.EVENT_BUS.addListener(this::onRegisterCommands);
+        MinecraftForge.EVENT_BUS.addListener(LightFlicker::onLevelTick);
         LOGGER.info("Backrooms mod loaded");
     }
 

@@ -1,0 +1,19 @@
+{
+ "variants": {
+  "facing=east": {
+   "model": "backroomsmod:block/backrooms_arch_corner"
+  },
+  "facing=south": {
+   "model": "backroomsmod:block/backrooms_arch_corner",
+   "y": 90
+  },
+  "facing=west": {
+   "model": "backroomsmod:block/backrooms_arch_corner",
+   "y": 180
+  },
+  "facing=north": {
+   "model": "backroomsmod:block/backrooms_arch_corner",
+   "y": 270
+  }
+ }
+}
