@@ -1,6 +1,7 @@
 package com.backroomsmod;
 
 import com.backroomsmod.block.DecalBlock;
+import com.backroomsmod.block.WallSignBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -23,10 +24,12 @@ public final class WallDecor {
     public static volatile Block OUTLET;
     public static volatile Block MOUNT_MARK;
     public static volatile Block CARPET_DENT;
+    public static volatile Block WALL_SIGN;
 
     private static volatile Item outletItem;
     private static volatile Item mountMarkItem;
     private static volatile Item dentItem;
+    private static volatile Item wallSignItem;
 
     private WallDecor() {}
 
@@ -35,6 +38,7 @@ public final class WallDecor {
         OUTLET = new DecalBlock(DecalBlock.Kind.OUTLET);
         MOUNT_MARK = new DecalBlock(DecalBlock.Kind.MOUNT_MARK);
         CARPET_DENT = new DecalBlock(DecalBlock.Kind.DENT);
+        WALL_SIGN = new WallSignBlock();
     }
 
     @SubscribeEvent
@@ -44,15 +48,18 @@ public final class WallDecor {
             helper.register(new ResourceLocation(MODID, "wall_outlet"), OUTLET);
             helper.register(new ResourceLocation(MODID, "wall_mount_mark"), MOUNT_MARK);
             helper.register(new ResourceLocation(MODID, "carpet_dent"), CARPET_DENT);
+            helper.register(new ResourceLocation(MODID, "wall_sign"), WALL_SIGN);
         });
         event.register(ForgeRegistries.Keys.ITEMS, helper -> {
             createBlocks();
             outletItem = new BlockItem(OUTLET, new Item.Properties());
             mountMarkItem = new BlockItem(MOUNT_MARK, new Item.Properties());
             dentItem = new BlockItem(CARPET_DENT, new Item.Properties());
+            wallSignItem = new BlockItem(WALL_SIGN, new Item.Properties());
             helper.register(new ResourceLocation(MODID, "wall_outlet"), outletItem);
             helper.register(new ResourceLocation(MODID, "wall_mount_mark"), mountMarkItem);
             helper.register(new ResourceLocation(MODID, "carpet_dent"), dentItem);
+            helper.register(new ResourceLocation(MODID, "wall_sign"), wallSignItem);
         });
     }
 
@@ -62,6 +69,7 @@ public final class WallDecor {
             event.accept(outletItem);
             event.accept(mountMarkItem);
             event.accept(dentItem);
+            event.accept(wallSignItem);
         }
     }
 }

@@ -69,7 +69,7 @@ public class DecalBlock extends Block {
     }
 
     /** A box stuck on the wall behind the block; given for a north-facing block and turned to fit. */
-    private static VoxelShape wallBox(Direction facing, double x1, double y1, double x2, double y2, double depth) {
+    static VoxelShape wallBox(Direction facing, double x1, double y1, double x2, double y2, double depth) {
         switch (facing) {
             case SOUTH: return Block.box(16 - x2, y1, 0, 16 - x1, y2, depth);
             case EAST: return Block.box(0, y1, x1, depth, y2, x2);

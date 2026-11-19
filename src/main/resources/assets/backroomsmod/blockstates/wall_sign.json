@@ -1,0 +1,124 @@
+{
+  "variants": {
+    "facing=north,mirrored=false,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left"
+    },
+    "facing=north,mirrored=false,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right"
+    },
+    "facing=north,mirrored=false,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left"
+    },
+    "facing=north,mirrored=false,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right"
+    },
+    "facing=north,mirrored=true,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left_mirrored"
+    },
+    "facing=north,mirrored=true,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right_mirrored"
+    },
+    "facing=north,mirrored=true,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left_mirrored"
+    },
+    "facing=north,mirrored=true,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right_mirrored"
+    },
+    "facing=east,mirrored=false,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left",
+      "y": 90
+    },
+    "facing=east,mirrored=false,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right",
+      "y": 90
+    },
+    "facing=east,mirrored=false,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left",
+      "y": 90
+    },
+    "facing=east,mirrored=false,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right",
+      "y": 90
+    },
+    "facing=east,mirrored=true,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left_mirrored",
+      "y": 90
+    },
+    "facing=east,mirrored=true,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right_mirrored",
+      "y": 90
+    },
+    "facing=east,mirrored=true,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left_mirrored",
+      "y": 90
+    },
+    "facing=east,mirrored=true,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right_mirrored",
+      "y": 90
+    },
+    "facing=south,mirrored=false,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left",
+      "y": 180
+    },
+    "facing=south,mirrored=false,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right",
+      "y": 180
+    },
+    "facing=south,mirrored=false,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left",
+      "y": 180
+    },
+    "facing=south,mirrored=false,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right",
+      "y": 180
+    },
+    "facing=south,mirrored=true,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left_mirrored",
+      "y": 180
+    },
+    "facing=south,mirrored=true,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right_mirrored",
+      "y": 180
+    },
+    "facing=south,mirrored=true,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left_mirrored",
+      "y": 180
+    },
+    "facing=south,mirrored=true,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right_mirrored",
+      "y": 180
+    },
+    "facing=west,mirrored=false,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left",
+      "y": 270
+    },
+    "facing=west,mirrored=false,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right",
+      "y": 270
+    },
+    "facing=west,mirrored=false,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left",
+      "y": 270
+    },
+    "facing=west,mirrored=false,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right",
+      "y": 270
+    },
+    "facing=west,mirrored=true,variant=tilt_left": {
+      "model": "backroomsmod:block/wall_sign_tilt_left_mirrored",
+      "y": 270
+    },
+    "facing=west,mirrored=true,variant=tilt_right": {
+      "model": "backroomsmod:block/wall_sign_tilt_right_mirrored",
+      "y": 270
+    },
+    "facing=west,mirrored=true,variant=half_left": {
+      "model": "backroomsmod:block/wall_sign_half_left_mirrored",
+      "y": 270
+    },
+    "facing=west,mirrored=true,variant=half_right": {
+      "model": "backroomsmod:block/wall_sign_half_right_mirrored",
+      "y": 270
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "0": "backroomsmod:block/wall_sign_mirrored",
+    "particle": "backroomsmod:block/wall_sign_mirrored"
+  },
+  "elements": [
+    {
+      "from": [
+        2,
+        3,
+        15.4
+      ],
+      "to": [
+        14,
+        15,
+        15.9
+      ],
+      "rotation": {
+        "origin": [
+          8,
+          9,
+          15.65
+        ],
+        "axis": "z",
+        "angle": 22.5
+      },
+      "faces": {
+        "north": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

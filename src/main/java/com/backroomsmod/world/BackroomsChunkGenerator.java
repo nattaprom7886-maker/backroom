@@ -8,6 +8,7 @@ import com.backroomsmod.block.ChairBlock;
 import com.backroomsmod.block.DecalBlock;
 import com.backroomsmod.block.LightPanelBlock;
 import com.backroomsmod.block.StopSignBlock;
+import com.backroomsmod.block.WallSignBlock;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import java.util.List;
@@ -56,6 +57,7 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     // small wall/floor details: kept sparse on purpose so walls stay clean
     private static final double OUTLET_CHANCE = 0.07;  // share of solid wall faces (one per face segment) holding an outlet
     private static final double MOUNT_CHANCE = 0.045;  // share of solid wall faces holding an empty mount mark
+    private static final double WALL_SIGN_CHANCE = 0.03; // share of solid wall faces holding a sign stuck in the wall
     private static final double DENT_CHANCE = 0.06;    // chance per cell of holding a furniture footprint of carpet dents
     private static final int ZONE_CELLS = 4;         // lights go out per zone of 4x4 cells (24x24 blocks)
     private static final double DARK_ZONE_CHANCE = 0.2; // share of zones whose lights are all out
@@ -247,6 +249,15 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
             if (y != 3) return null;
             if (el != 2 + (int) Math.floorMod(mix(key, ecz, 320 + salt), 3L)) return null;
             return WallDecor.MOUNT_MARK.defaultBlockState().setValue(DecalBlock.FACING, facing);
+        }
+        if (r < OUTLET_CHANCE + MOUNT_CHANCE + WALL_SIGN_CHANCE) {
+            if (y != 3) return null;
+            if (el != 2 + (int) Math.floorMod(mix(key, ecz, 340 + salt), 3L)) return null;
+            WallSignBlock.Variant[] variants = WallSignBlock.Variant.values();
+            return WallDecor.WALL_SIGN.defaultBlockState()
+                .setValue(WallSignBlock.FACING, facing)
+                .setValue(WallSignBlock.VARIANT, variants[(int) Math.floorMod(mix(key, ecz, 350 + salt), (long) variants.length)])
+                .setValue(WallSignBlock.MIRRORED, rand01(mix(key, ecz, 360 + salt)) < 0.5);
         }
         return null;
     }
