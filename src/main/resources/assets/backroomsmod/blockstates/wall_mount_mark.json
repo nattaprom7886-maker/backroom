@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "backroomsmod:block/wall_mount_mark"
+    },
+    "facing=east": {
+      "model": "backroomsmod:block/wall_mount_mark",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "backroomsmod:block/wall_mount_mark",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "backroomsmod:block/wall_mount_mark",
+      "y": 270
+    }
+  }
+}

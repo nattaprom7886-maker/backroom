@@ -1,9 +1,11 @@
 package com.backroomsmod.world;
 
 import com.backroomsmod.ModBlocks;
+import com.backroomsmod.WallDecor;
 import com.backroomsmod.block.ArchCornerBlock;
 import com.backroomsmod.block.BalustradeBlock;
 import com.backroomsmod.block.ChairBlock;
+import com.backroomsmod.block.DecalBlock;
 import com.backroomsmod.block.LightPanelBlock;
 import com.backroomsmod.block.StopSignBlock;
 import com.mojang.serialization.Codec;
@@ -51,6 +53,10 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
     private static final double SPECIAL_CHANCE = 0.035;    // share of halls that hold a set piece (about 1 set piece per ~180x180 blocks)
     private static final double CHAIR_CHANCE = 0.06;      // chance per cell of holding a chair arrangement
     private static final double SIGN_CHANCE = 0.05;      // chance per cell of holding a stop sign
+    // small wall/floor details: kept sparse on purpose so walls stay clean
+    private static final double OUTLET_CHANCE = 0.07;  // share of solid wall faces (one per face segment) holding an outlet
+    private static final double MOUNT_CHANCE = 0.045;  // share of solid wall faces holding an empty mount mark
+    private static final double DENT_CHANCE = 0.06;    // chance per cell of holding a furniture footprint of carpet dents
     private static final int ZONE_CELLS = 4;         // lights go out per zone of 4x4 cells (24x24 blocks)
     private static final double DARK_ZONE_CHANCE = 0.2; // share of zones whose lights are all out
     private static final double FAULTY_LIGHT_CHANCE = 0.3; // share of lit cells whose lights flicker
@@ -206,6 +212,66 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
             .setValue(StopSignBlock.STYLE, style)
             .setValue(StopSignBlock.MIRRORED, mirrored)
             .setValue(StopSignBlock.PART, style == StopSignBlock.Style.TALL ? y - 2 : 0);
+    }
+
+
+    // ---------- wall outlets, empty mount marks and carpet dents ----------
+
+    /**
+     * Details stuck on the solid wall next to this air column: a low outlet (y=2) or an empty mount
+     * mark at eye height (y=3). Each wall face segment holds at most one of them, and only a small
+     * share of faces hold anything, so most walls stay clean.
+     */
+    private static BlockState wallDecorAt(int cx, int cz, int lx, int lz, int y) {
+        if (y != 2 && y != 3) return null;
+        if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
+        BlockState s = null;
+        if (lx == 1) s = faceDecor(1, cx, cz, 0, lz, y, Direction.EAST);
+        if (s == null && lx == 5) s = faceDecor(1, cx + 1, cz, 1, lz, y, Direction.WEST);
+        if (s == null && lz == 1) s = faceDecor(2, cx, cz, 0, lx, y, Direction.SOUTH);
+        if (s == null && lz == 5) s = faceDecor(2, cx, cz + 1, 1, lx, y, Direction.NORTH);
+        return s;
+    }
+
+    /** side 0 = the face looking at the edge's own cell, side 1 = the face looking back at the previous cell. */
+    private static BlockState faceDecor(int salt, int ecx, int ecz, int side, int el, int y, Direction facing) {
+        if (edgeType(salt, ecx, ecz) != 2) return null; // only plain solid walls
+        long key = ecx * 2L + side;
+        double r = rand01(mix(key, ecz, 300 + salt));
+        if (r < OUTLET_CHANCE) {
+            if (y != 2) return null;
+            if (el != 1 + (int) Math.floorMod(mix(key, ecz, 310 + salt), 5L)) return null;
+            return WallDecor.OUTLET.defaultBlockState().setValue(DecalBlock.FACING, facing);
+        }
+        if (r < OUTLET_CHANCE + MOUNT_CHANCE) {
+            if (y != 3) return null;
+            if (el != 2 + (int) Math.floorMod(mix(key, ecz, 320 + salt), 3L)) return null;
+            return WallDecor.MOUNT_MARK.defaultBlockState().setValue(DecalBlock.FACING, facing);
+        }
+        return null;
+    }
+
+    /**
+     * Four dents in the carpet at the corners of a 2-3 x 2-3 block footprint, as if a table or a
+     * cabinet once stood there. FACING picks which corner of the footprint the dent belongs to.
+     */
+    private static BlockState dentAt(int cx, int cz, int lx, int lz, int y) {
+        if (y != 2) return null;
+        if (rand01(mix(cx, cz, 330)) >= DENT_CHANCE) return null;
+        if (cellSpecialType(cx, cz) >= 0 || hasDoor(cx, cz)) return null;
+        int w = 2 + (int) (mix(cx, cz, 331) & 1L);
+        int d = 2 + (int) (mix(cx, cz, 332) & 1L);
+        int px = 1 + (int) Math.floorMod(mix(cx, cz, 333), (long) (6 - w));
+        int pz = 1 + (int) Math.floorMod(mix(cx, cz, 334), (long) (6 - d));
+        boolean west = lx == px, east = lx == px + w - 1;
+        boolean north = lz == pz, south = lz == pz + d - 1;
+        Direction f;
+        if (north && west) f = Direction.NORTH;
+        else if (north && east) f = Direction.EAST;
+        else if (south && east) f = Direction.SOUTH;
+        else if (south && west) f = Direction.WEST;
+        else return null;
+        return WallDecor.CARPET_DENT.defaultBlockState().setValue(DecalBlock.FACING, f);
     }
 
     // ---------- lights: dark zones and flickering (used by LightFlicker) ----------
@@ -487,6 +553,8 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                             BlockState chair = structureAt(x, z, cx, cz, lx, lz, y);
                             if (chair == null) chair = chairAt(cx, cz, lx, lz, y);
                             if (chair == null) chair = signAt(cx, cz, lx, lz, y);
+                            if (chair == null) chair = wallDecorAt(cx, cz, lx, lz, y);
+                            if (chair == null) chair = dentAt(cx, cz, lx, lz, y);
                             if (chair == null) continue; // air
                             state = chair;
                         }

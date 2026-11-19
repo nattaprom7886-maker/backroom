@@ -1,0 +1,69 @@
+{
+  "render_type": "minecraft:cutout",
+  "ambientocclusion": false,
+  "textures": {
+    "0": "backroomsmod:block/wall_outlet",
+    "particle": "backroomsmod:block/wall_outlet"
+  },
+  "elements": [
+    {
+      "from": [
+        5,
+        4,
+        15.4
+      ],
+      "to": [
+        11,
+        12,
+        16
+      ],
+      "faces": {
+        "north": {
+          "uv": [
+            5,
+            4,
+            11,
+            12
+          ],
+          "texture": "#0"
+        },
+        "up": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#0"
+        },
+        "down": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#0"
+        },
+        "east": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#0"
+        },
+        "west": {
+          "uv": [
+            5,
+            4,
+            11,
+            5
+          ],
+          "texture": "#0"
+        }
+      }
+    }
+  ]
+}

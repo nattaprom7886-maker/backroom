@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "backroomsmod:block/carpet_dent"
+    },
+    "facing=east": {
+      "model": "backroomsmod:block/carpet_dent",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "backroomsmod:block/carpet_dent",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "backroomsmod:block/carpet_dent",
+      "y": 270
+    }
+  }
+}
