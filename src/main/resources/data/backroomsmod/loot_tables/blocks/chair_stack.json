@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "backroomsmod:chair_stack",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "backroomsmod:chair_stack",
+              "properties": {
+                "part": "0"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

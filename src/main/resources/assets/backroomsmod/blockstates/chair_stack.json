@@ -1,0 +1,244 @@
+{
+ "variants": {
+  "dark=true,facing=north,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p0"
+  },
+  "dark=false,facing=north,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p0"
+  },
+  "dark=true,facing=north,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p1"
+  },
+  "dark=false,facing=north,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p1"
+  },
+  "dark=true,facing=north,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p0"
+  },
+  "dark=false,facing=north,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p0"
+  },
+  "dark=true,facing=north,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p1"
+  },
+  "dark=false,facing=north,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p1"
+  },
+  "dark=true,facing=north,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p0"
+  },
+  "dark=false,facing=north,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p0"
+  },
+  "dark=true,facing=north,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p1"
+  },
+  "dark=false,facing=north,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p1"
+  },
+  "dark=true,facing=north,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p0"
+  },
+  "dark=false,facing=north,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p0"
+  },
+  "dark=true,facing=north,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p1"
+  },
+  "dark=false,facing=north,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p1"
+  },
+  "dark=true,facing=east,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p0",
+   "y": 90
+  },
+  "dark=false,facing=east,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p0",
+   "y": 90
+  },
+  "dark=true,facing=east,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p1",
+   "y": 90
+  },
+  "dark=false,facing=east,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p1",
+   "y": 90
+  },
+  "dark=true,facing=east,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p0",
+   "y": 90
+  },
+  "dark=false,facing=east,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p0",
+   "y": 90
+  },
+  "dark=true,facing=east,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p1",
+   "y": 90
+  },
+  "dark=false,facing=east,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p1",
+   "y": 90
+  },
+  "dark=true,facing=east,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p0",
+   "y": 90
+  },
+  "dark=false,facing=east,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p0",
+   "y": 90
+  },
+  "dark=true,facing=east,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p1",
+   "y": 90
+  },
+  "dark=false,facing=east,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p1",
+   "y": 90
+  },
+  "dark=true,facing=east,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p0",
+   "y": 90
+  },
+  "dark=false,facing=east,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p0",
+   "y": 90
+  },
+  "dark=true,facing=east,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p1",
+   "y": 90
+  },
+  "dark=false,facing=east,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p1",
+   "y": 90
+  },
+  "dark=true,facing=south,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p0",
+   "y": 180
+  },
+  "dark=false,facing=south,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p0",
+   "y": 180
+  },
+  "dark=true,facing=south,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p1",
+   "y": 180
+  },
+  "dark=false,facing=south,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p1",
+   "y": 180
+  },
+  "dark=true,facing=south,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p0",
+   "y": 180
+  },
+  "dark=false,facing=south,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p0",
+   "y": 180
+  },
+  "dark=true,facing=south,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p1",
+   "y": 180
+  },
+  "dark=false,facing=south,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p1",
+   "y": 180
+  },
+  "dark=true,facing=south,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p0",
+   "y": 180
+  },
+  "dark=false,facing=south,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p0",
+   "y": 180
+  },
+  "dark=true,facing=south,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p1",
+   "y": 180
+  },
+  "dark=false,facing=south,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p1",
+   "y": 180
+  },
+  "dark=true,facing=south,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p0",
+   "y": 180
+  },
+  "dark=false,facing=south,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p0",
+   "y": 180
+  },
+  "dark=true,facing=south,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p1",
+   "y": 180
+  },
+  "dark=false,facing=south,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p1",
+   "y": 180
+  },
+  "dark=true,facing=west,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p0",
+   "y": 270
+  },
+  "dark=false,facing=west,part=0,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p0",
+   "y": 270
+  },
+  "dark=true,facing=west,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_dark_p1",
+   "y": 270
+  },
+  "dark=false,facing=west,part=1,style=0": {
+   "model": "backroomsmod:block/chair_stack_s0_wood_p1",
+   "y": 270
+  },
+  "dark=true,facing=west,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p0",
+   "y": 270
+  },
+  "dark=false,facing=west,part=0,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p0",
+   "y": 270
+  },
+  "dark=true,facing=west,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_dark_p1",
+   "y": 270
+  },
+  "dark=false,facing=west,part=1,style=1": {
+   "model": "backroomsmod:block/chair_stack_s1_wood_p1",
+   "y": 270
+  },
+  "dark=true,facing=west,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p0",
+   "y": 270
+  },
+  "dark=false,facing=west,part=0,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p0",
+   "y": 270
+  },
+  "dark=true,facing=west,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_dark_p1",
+   "y": 270
+  },
+  "dark=false,facing=west,part=1,style=2": {
+   "model": "backroomsmod:block/chair_stack_s2_wood_p1",
+   "y": 270
+  },
+  "dark=true,facing=west,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p0",
+   "y": 270
+  },
+  "dark=false,facing=west,part=0,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p0",
+   "y": 270
+  },
+  "dark=true,facing=west,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_dark_p1",
+   "y": 270
+  },
+  "dark=false,facing=west,part=1,style=3": {
+   "model": "backroomsmod:block/chair_stack_s3_wood_p1",
+   "y": 270
+  }
+ }
+}

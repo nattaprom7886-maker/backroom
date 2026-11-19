@@ -5,6 +5,7 @@ import com.backroomsmod.WallDecor;
 import com.backroomsmod.block.ArchCornerBlock;
 import com.backroomsmod.block.BalustradeBlock;
 import com.backroomsmod.block.ChairBlock;
+import com.backroomsmod.block.ChairStackBlock;
 import com.backroomsmod.block.DecalBlock;
 import com.backroomsmod.block.LightPanelBlock;
 import com.backroomsmod.block.StopSignBlock;
@@ -177,11 +178,15 @@ public class BackroomsChunkGenerator extends ChunkGenerator {
                 : kind < 0.62 ? ChairBlock.Pose.FALLEN : ChairBlock.Pose.SUNK;
             return chairState((mix(cx, cz, 23) & 1L) == 0, (int) (mix(cx, cz, 25) & 3), pose);
         }
-        // stack of 3 or 4 chairs, each turned and mixed in type
-        int height = 3 + (int) (mix(cx, cz, 26) & 1L);
-        if (y >= 2 + height) return null;
-        return chairState((mix(cx, cz, 27 + y) & 1L) == 0, (int) (mix(cx, cz, 40 + y) & 3),
-            ChairBlock.Pose.UPRIGHT);
+        // pile of 3 or 4 stacked chairs: one single tall block (part 0), plus an upper part (part 1) for 4 chairs
+        boolean tall = (mix(cx, cz, 26) & 1L) == 1L;
+        int part = y - 2;
+        if (part > 1 || (part == 1 && !tall)) return null;
+        return WallDecor.CHAIR_STACK.defaultBlockState()
+            .setValue(ChairStackBlock.FACING, Direction.from2DDataValue((int) (mix(cx, cz, 27) & 3)))
+            .setValue(ChairStackBlock.STYLE, (int) Math.floorMod(mix(cx, cz, 28), 4L))
+            .setValue(ChairStackBlock.DARK, (mix(cx, cz, 29) & 1L) == 0)
+            .setValue(ChairStackBlock.PART, part);
     }
 
     private static BlockState chairState(boolean office, int facing, ChairBlock.Pose pose) {

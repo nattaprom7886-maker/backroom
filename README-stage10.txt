@@ -1,6 +1,6 @@
 Stage 10 - wall outlets, empty mount marks, carpet dents
 
-New files: WallDecor.java, block/DecalBlock.java, block/WallSignBlock.java, 3 blockstates, 3 block models, 3 item models, 6 textures.
+New files: block/ChairStackBlock.java (stacked chairs as one block), WallDecor.java, block/DecalBlock.java, block/WallSignBlock.java, 3 blockstates, 3 block models, 3 item models, 6 textures.
 Changed file: world/BackroomsChunkGenerator.java (replace the old one).
 ModBlocks.java does not need to change: WallDecor registers its own blocks.
 
@@ -8,7 +8,8 @@ Optional - add these lines to assets/backroomsmod/lang/en_us.json (before the la
   "block.backroomsmod.wall_outlet": "Wall Outlet",
   "block.backroomsmod.wall_mount_mark": "Empty Mount Mark",
   "block.backroomsmod.carpet_dent": "Carpet Dent",
-  "block.backroomsmod.wall_sign": "Wall Sign"
+  "block.backroomsmod.wall_sign": "Wall Sign",
+  "block.backroomsmod.chair_stack": "Stacked Chairs"
 
 How sparse it is (tune in BackroomsChunkGenerator):
   OUTLET_CHANCE 0.07  - outlets (about 1 per 24x24 blocks)
